@@ -6,6 +6,15 @@ from .models import FunctionCategory, Position, Department, Floor,\
 
 class UserProfileDetailFunctionInline(admin.TabularInline):
     model = user_profile_detail_function
+    extra = 1
+    
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'detail_function':
+            kwargs['queryset'] = DetailFunction.objects.filter(
+                # Lọc chỉ những DetailFunction hợp lệ
+                id__isnull=False
+            )
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 class PositionInline(admin.TabularInline):
     model = Position
     extra = 1
