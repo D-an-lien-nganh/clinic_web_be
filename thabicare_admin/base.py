@@ -247,7 +247,7 @@ SIMPLE_JWT = {
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Thabicare API',
-    'DESCRIPTION': "Đây là mô tả API của dự án Thabicare, designed by Mr. LongCV 096.995.2831 & Mr. Hưng Hoàng, monitored by Mr. Tiệp 0982.521.378",
+    'DESCRIPTION': "",
     'VERSION': '3.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'SWAGGER_UI_DIST': 'SIDECAR', 
