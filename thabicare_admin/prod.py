@@ -1,6 +1,6 @@
 from .base import *
-DEBUG = True
-SECURE_SSL_REDIRECT = True
+DEBUG = False
+SECURE_SSL_REDIRECT = False
 ALLOWED_HOSTS = ['*']
 
 # Database
