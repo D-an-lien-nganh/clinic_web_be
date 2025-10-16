@@ -13,7 +13,7 @@ class SupplierProductDebt(models.Model):
     total_amount = models.DecimalField(max_digits=20, decimal_places=2, default=0, verbose_name="Tổng nợ sản phẩm")
 
     class Meta:
-        app_label = "app_product"
+        app_label = "app_accounting"
         verbose_name = "Công nợ sản phẩm"
         verbose_name_plural = "Công nợ sản phẩm"
 
@@ -40,7 +40,7 @@ class ProductDebtDetail(models.Model):
     note        = models.TextField(null=True, blank=True)
 
     class Meta:
-        app_label = "app_product"
+        app_label = "app_accounting"
         verbose_name = "Chi tiết thanh toán sản phẩm"
         verbose_name_plural = "Chi tiết thanh toán sản phẩm"
 
@@ -69,7 +69,7 @@ class SupplierFacilityDebt(models.Model):
     total_amount = models.DecimalField(max_digits=20, decimal_places=2, default=0, verbose_name="Tổng nợ vật tư")
 
     class Meta:
-        app_label = "app_product"
+        app_label = "app_accounting"
         verbose_name = "Công nợ vật tư"
         verbose_name_plural = "Công nợ vật tư"
 
@@ -96,7 +96,7 @@ class FacilityDebtDetail(models.Model):
     note        = models.TextField(null=True, blank=True)
 
     class Meta:
-        app_label = "app_product"
+        app_label = "app_accounting"
         verbose_name = "Chi tiết thanh toán vật tư"
         verbose_name_plural = "Chi tiết thanh toán vật tư"
 
