@@ -19,3 +19,5 @@ DATABASES = {
         }
     }
 }
+STATIC_URL = '/static/'
+STATIC_ROOT = '/srv/thabicare/static_root'   # 👈 mới
