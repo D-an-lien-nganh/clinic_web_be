@@ -83,9 +83,26 @@ class ProductViewSet(viewsets.ModelViewSet):
         queryset = Product.objects.filter(filters).order_by('-created')
 
         return queryset
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def create(self, request, *args, **kwargs):
+        print("\n" + "🔴"*30)
+        print("📥 INCOMING REQUEST:")
+        print(f"  request.data: {request.data}")
+        print(f"  request.data type: {type(request.data)}")
+        print("🔴"*30 + "\n")
+        
+        try:
+            response = super().create(request, *args, **kwargs)
+            print("\n✅ Product created successfully\n")
+            return response
+        except Exception as e:
+            print("\n" + "❌"*30)
+            print(f"ERROR: {str(e)}")
+            print(f"ERROR TYPE: {type(e).__name__}")
+            
+            import traceback
+            traceback.print_exc()
+            print("❌"*30 + "\n")
+            raise
 
 @extend_schema(tags=["app_product"])
 @maintenance_schema_view()

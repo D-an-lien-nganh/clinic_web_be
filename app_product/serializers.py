@@ -106,13 +106,68 @@ class ServiceSerializer(serializers.ModelSerializer):
         return instance
 
 class ProductSerializer(serializers.ModelSerializer):
-    unit_name = serializers.ReadOnlyField(source="unit.name")
-    product_type_name = serializers.ReadOnlyField(source="product_type.name")
+    unit = serializers.PrimaryKeyRelatedField(
+        queryset=Unit.objects.all(), 
+        required=False, 
+        allow_null=True
+    )
+    unit_name = serializers.CharField(source="unit.name", read_only=True)
+    product_type_name = serializers.CharField(source="get_product_type_display", read_only=True)
+
     class Meta:
         model = Product
-        fields = ('id', 'code', 'name', 'description', 'effect', 'origin', 'sell_price', 'unit', 'unit_name','product_type', 'product_type_name')
-        read_only_fields = ['id', 'code', 'unit_name']
+        fields = (
+            'id', 'code', 'name', 'description', 'effect',
+            'origin', 'sell_price', 'unit', 'unit_name',
+            'product_type', 'product_type_name'
+        )
+        read_only_fields = ['id', 'code', 'unit_name', 'product_type_name']
+    
+    def to_internal_value(self, data):
+        print("\n" + "="*60)
+        print("🔵 BEFORE CONVERSION:")
+        print(f"  Raw data: {data}")
+        print(f"  unit value: {data.get('unit')}")
+        print(f"  unit type: {type(data.get('unit'))}")
         
+        # Convert string unit sang int
+        if 'unit' in data and isinstance(data['unit'], str):
+            data = data.copy()
+            try:
+                data['unit'] = int(data['unit'])
+                print(f"✅ Converted unit to: {data['unit']} (type: {type(data['unit'])})")
+            except (ValueError, TypeError) as e:
+                print(f"❌ Conversion failed: {e}")
+        
+        result = super().to_internal_value(data)
+        
+        print(f"🟢 AFTER CONVERSION:")
+        print(f"  validated_data: {result}")
+        print(f"  unit object: {result.get('unit')}")
+        print(f"  unit ID: {result.get('unit').id if result.get('unit') else None}")
+        print("="*60 + "\n")
+        
+        return result
+    
+    def create(self, validated_data):
+        print("\n" + "="*60)
+        print("🟡 CREATING PRODUCT:")
+        print(f"  validated_data: {validated_data}")
+        print(f"  unit: {validated_data.get('unit')}")
+        print(f"  unit_id: {validated_data.get('unit').id if validated_data.get('unit') else None}")
+        
+        # Kiểm tra unit có tồn tại không
+        if validated_data.get('unit'):
+            unit = validated_data.get('unit')
+            unit_exists = Unit.objects.filter(id=unit.id).exists()
+            print(f"  Unit exists in DB: {unit_exists}")
+            
+            if not unit_exists:
+                print(f"❌ ERROR: Unit {unit.id} KHÔNG TỒN TẠI!")
+                raise serializers.ValidationError(f"Unit với ID {unit.id} không tồn tại")
+        
+        print("="*60 + "\n")
+        return super().create(validated_data)
 class InventorySummarySerializer(serializers.Serializer):
     product_code = serializers.CharField()
     product_name = serializers.CharField()
